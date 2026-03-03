@@ -8,6 +8,7 @@ import ToastContainer from './components/Toast';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
+import Home from './pages/Home';
 import Profile from './pages/dashboard/Profile';
 import Portfolio from './pages/dashboard/Portfolio';
 import Projects from './pages/dashboard/Projects';
@@ -19,7 +20,8 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public auth routes */}
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -36,7 +38,7 @@ function App() {
           </Route>
 
           {/* Fallback */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
       <ToastContainer />

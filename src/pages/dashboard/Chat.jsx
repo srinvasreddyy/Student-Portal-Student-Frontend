@@ -241,7 +241,6 @@ const StudentChat = () => {
     const [userId, setUserId] = useState(null);
     const [initError, setInitError] = useState(null);
     const [projects, setProjects] = useState([]);
-    const isConnecting = useRef(false);
 
     useEffect(() => {
         if (!apiKey) {
@@ -250,10 +249,7 @@ const StudentChat = () => {
         }
 
         let isMounted = true;
-
-        // Guard against double-init from React 18 StrictMode
-        if (isConnecting.current) return;
-        isConnecting.current = true;
+        const chatClient = StreamChat.getInstance(apiKey);
 
         const init = async () => {
             try {
@@ -276,25 +272,16 @@ const StudentChat = () => {
                     console.warn('Failed to load projects for chat', e);
                 }
 
-                const chatClient = StreamChat.getInstance(apiKey);
-
-                // Already connected as the right user — just reuse
-                if (chatClient.userID === id) {
-                    if (isMounted) setClient(chatClient);
-                    return;
-                }
-
-                // Connected as someone else — disconnect first
-                if (chatClient.userID) {
+                if (chatClient.userID && chatClient.userID !== id) {
                     await chatClient.disconnectUser();
                 }
 
-                if (!isMounted) return;
-
-                await chatClient.connectUser(
-                    { id, name: user.email || 'Student', role: 'user' },
-                    streamToken
-                );
+                if (!chatClient.userID) {
+                    await chatClient.connectUser(
+                        { id, name: user.email || 'Student', role: 'user' },
+                        streamToken
+                    );
+                }
 
                 if (isMounted) {
                     setClient(chatClient);
@@ -302,8 +289,6 @@ const StudentChat = () => {
             } catch (err) {
                 console.error('Chat init error:', err);
                 if (isMounted) setInitError(err.message || 'Failed to initialize chat.');
-            } finally {
-                isConnecting.current = false;
             }
         };
 
@@ -311,6 +296,9 @@ const StudentChat = () => {
 
         return () => {
             isMounted = false;
+            if (chatClient) {
+                chatClient.disconnectUser();
+            }
         };
     }, []);
 

@@ -16,6 +16,7 @@ const ProjectDetail = ({ project, onClose, onApply, applying }) => {
     const postedByType = project.postedByModel === 'Company' ? 'Company' : 'University';
     const PostedByIcon = project.postedByModel === 'Company' ? Building2 : GraduationCap;
     const hasApplied = project._hasApplied;
+    const isAccepted = project._isAccepted;
 
     return (
         <motion.div
@@ -121,14 +122,16 @@ const ProjectDetail = ({ project, onClose, onApply, applying }) => {
                 {/* Apply / Applied */}
                 {project.status === 'open' && (
                     <motion.button
-                        className={`btn ${hasApplied ? 'btn-secondary' : 'btn-primary'} btn-lg`}
+                        className={`btn ${hasApplied || isAccepted ? 'btn-secondary' : 'btn-primary'} btn-lg`}
                         style={{ width: '100%' }}
-                        disabled={hasApplied || applying}
+                        disabled={hasApplied || isAccepted || applying}
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => !hasApplied && onApply(project._id)}
+                        onClick={() => !(hasApplied || isAccepted) && onApply(project._id)}
                     >
                         {applying ? (
                             <div className="spinner spinner-sm" style={{ borderTopColor: '#fff', borderColor: 'rgba(255,255,255,0.3)' }} />
+                        ) : isAccepted ? (
+                            <><CheckCircle size={18} color="#10B981" /> Accepted</>
                         ) : hasApplied ? (
                             <><CheckCircle size={18} /> Already Applied</>
                         ) : (
@@ -178,12 +181,13 @@ const Projects = () => {
             const res = await projectApi.list(params);
             const data = res.data.data || [];
 
-            // Check which projects current user has applied to
+            // Check which projects current user has applied or been accepted to
             const userStr = localStorage.getItem('user');
             const userId = userStr ? JSON.parse(userStr).id : null;
             const enriched = data.map(p => ({
                 ...p,
                 _hasApplied: userId ? (p.appliedStudents || []).some(a => (a.studentRef?._id || a.studentRef) === userId) : false,
+                _isAccepted: userId ? (p.acceptedStudents || []).some(a => (a.studentRef?._id || a.studentRef) === userId) : false,
             }));
 
             setProjects(enriched);
@@ -322,7 +326,9 @@ const Projects = () => {
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Users size={12} /> {slotsLeft} left</span>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Clock size={12} /> {project.durationInWeeks}w</span>
                                         </div>
-                                        {project._hasApplied ? (
+                                        {project._isAccepted ? (
+                                            <span className="tag tag-success" style={{ fontSize: '0.7rem' }}><CheckCircle size={10} /> Accepted</span>
+                                        ) : project._hasApplied ? (
                                             <span className="tag tag-success" style={{ fontSize: '0.7rem' }}><CheckCircle size={10} /> Applied</span>
                                         ) : (
                                             <button

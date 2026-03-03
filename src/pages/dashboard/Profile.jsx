@@ -67,9 +67,19 @@ const TimelineEntryForm = ({ entry, onChange, onRemove, type, readOnly }) => {
             { key: 'title', label: 'Title', icon: Briefcase, required: true },
             { key: 'company', label: 'Company', icon: Building2, required: true },
             { key: 'from', label: 'From', icon: Calendar, type: 'date' },
-            { key: 'to', label: 'To', icon: Calendar, type: 'date' },
+            { key: 'to', label: 'To', icon: Calendar, type: 'date', disabledIfCurrent: true },
             { key: 'description', label: 'Description', icon: PenLine, multiline: true },
         ];
+
+    // Format ISO date snippet for <input type="date">
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        try {
+            return new Date(dateStr).toISOString().split('T')[0];
+        } catch (e) {
+            return '';
+        }
+    };
 
     return (
         <motion.div
@@ -119,17 +129,36 @@ const TimelineEntryForm = ({ entry, onChange, onRemove, type, readOnly }) => {
                             <input
                                 type={f.type || 'text'}
                                 className="input-field"
-                                value={entry[f.key] || ''}
+                                value={f.type === 'date' ? formatDate(entry[f.key]) : (entry[f.key] || '')}
                                 onChange={e => onChange(f.key, e.target.value)}
                                 placeholder={`Enter ${f.label.toLowerCase()}`}
-                                required={f.required}
-                                disabled={readOnly}
-                                style={readOnly ? { background: '#F8FAFC', cursor: 'not-allowed' } : {}}
+                                required={f.required && !f.disabledIfCurrent}
+                                disabled={readOnly || (f.disabledIfCurrent && entry.isCurrent)}
+                                style={(readOnly || (f.disabledIfCurrent && entry.isCurrent)) ? { background: '#F8FAFC', cursor: 'not-allowed', color: '#94a3b8' } : {}}
                             />
                         )}
                     </div>
                 ))}
             </div>
+
+            {/* Present Checkbox for Experience */}
+            {type === 'experience' && !readOnly && (
+                <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                        type="checkbox"
+                        id={`current-${entry.title}`}
+                        checked={!!entry.isCurrent}
+                        onChange={(e) => {
+                            onChange('isCurrent', e.target.checked);
+                            if (e.target.checked) onChange('to', null);
+                        }}
+                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--primary)' }}
+                    />
+                    <label htmlFor={`current-${entry.title}`} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', cursor: 'pointer', userSelect: 'none' }}>
+                        I currently work here (Present)
+                    </label>
+                </div>
+            )}
         </motion.div>
     );
 };
@@ -211,7 +240,7 @@ const Profile = () => {
     const addTimelineEntry = (type) => {
         const empty = type === 'education'
             ? { institution: '', degree: '', field: '', startYear: '', endYear: '', grade: '' }
-            : { title: '', company: '', from: '', to: '', description: '' };
+            : { title: '', company: '', from: '', to: '', isCurrent: false, description: '' };
         setProfile(prev => ({ ...prev, [type]: [...(prev[type] || []), empty] }));
         setHasChanges(true);
     };

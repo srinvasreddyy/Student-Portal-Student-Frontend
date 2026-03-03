@@ -36,10 +36,10 @@ const MyProjects = () => {
 
             // Categorize
             const categorized = [
-                ...acceptedProjects.filter(p => p.status === 'in_progress').map(p => ({ ...p, _category: 'active' })),
+                ...acceptedProjects.filter(p => ['open', 'in_progress'].includes(p.status)).map(p => ({ ...p, _category: 'active' })),
                 ...acceptedProjects.filter(p => p.status === 'completed').map(p => ({ ...p, _category: 'completed' })),
                 ...appliedProjects.map(p => ({ ...p, _category: 'pending' })),
-                ...acceptedProjects.filter(p => !['in_progress', 'completed'].includes(p.status)).map(p => ({ ...p, _category: 'other' })),
+                ...acceptedProjects.filter(p => !['open', 'in_progress', 'completed'].includes(p.status)).map(p => ({ ...p, _category: 'other' })),
             ];
 
             setProjects(categorized);
