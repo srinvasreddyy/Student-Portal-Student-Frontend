@@ -61,7 +61,7 @@ const ForgotPassword = () => {
                     background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
                     borderRadius: '20px', border: '1px solid rgba(255,255,255,0.6)',
                     boxShadow: '0 20px 60px rgba(37,99,235,0.08)',
-                    padding: '2.5rem', position: 'relative', zIndex: 1, overflow: 'hidden',
+                    padding: 'clamp(1.5rem, 5vw, 2.5rem)', position: 'relative', zIndex: 1, overflow: 'hidden',
                 }}
             >
                 <AnimatePresence mode="wait">

@@ -650,7 +650,19 @@ textarea.input-field {
 }
 
 /* ═══════════ Responsive ═══════════ */
+
+/* Prevent horizontal overflow globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* ── Tablet \u0026 Below (≤768px) ── */
 @media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
   .page-container {
     padding: 1rem;
   }
@@ -661,6 +673,55 @@ textarea.input-field {
 
   h2 {
     font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  /* Touch-friendly form inputs */
+  input, select, textarea, .input-field {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+    min-height: 44px;
+  }
+
+  /* Buttons — touch-friendly */
+  .btn, button {
+    min-height: 44px;
+  }
+
+  /* Glass cards — reduce border-radius on small screens */
+  .glass-card, .glass-card-static {
+    border-radius: var(--radius-md);
+  }
+
+  /* Empty state — compact */
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+}
+
+/* ── Small Phones (≤480px) ── */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  .page-container {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
 
