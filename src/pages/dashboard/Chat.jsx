@@ -229,7 +229,7 @@ const ChatLayout = ({ projects, userId }) => {
     if (!filters) return null;
 
     return (
-        <div style={{ display: 'flex', width: '100%', height: '100%', padding: isMobile ? '0' : '1.5rem', gap: '1.5rem', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', width: '100%', height: '100%', padding: isMobile ? '0' : '1.5rem', gap: '1.5rem', position: 'relative', zIndex: 1, minHeight: 0 }}>
 
             {/* Cinematic Channel List Island */}
             {showChannelList && (
@@ -248,10 +248,10 @@ const ChatLayout = ({ projects, userId }) => {
 
             {/* Chat Area Island */}
             {showChannel && (
-                <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={physics.spring} style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, position: 'relative', background: isMobile ? '#fff' : theme.glassDeep, backdropFilter: 'blur(40px)', borderRadius: isMobile ? '0' : '24px', border: isMobile ? 'none' : `1px solid ${theme.glassBorder}`, boxShadow: isMobile ? 'none' : theme.shadowElevated, overflow: 'hidden' }}>
+                <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={physics.spring} style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, position: 'relative', background: isMobile ? '#fff' : theme.glassDeep, backdropFilter: 'blur(40px)', borderRadius: isMobile ? '0' : '24px', border: isMobile ? 'none' : `1px solid ${theme.glassBorder}`, boxShadow: isMobile ? 'none' : theme.shadowElevated, overflow: 'hidden', height: '100%' }}>
                     <Channel>
-                        <Window>
-                            <div style={{ display: 'flex', alignItems: 'center', borderBottom: `1px solid ${theme.glassBorder}`, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(20px)', padding: isMobile ? '0.5rem' : '0' }}>
+                        <Window style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', borderBottom: `1px solid ${theme.glassBorder}`, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(20px)', padding: isMobile ? '0.5rem' : '0', flexShrink: 0 }}>
                                 {isMobile && (
                                     <motion.button whileTap={{ scale: 0.9 }} onClick={() => setActiveChannel(null)} style={{ padding: '0.5rem', marginLeft: '0.5rem', color: theme.textPrimary, display: 'flex', background: '#f1f5f9', border: 'none', cursor: 'pointer', borderRadius: '50%' }}>
                                         <ArrowLeft size={20} />
@@ -260,7 +260,7 @@ const ChatLayout = ({ projects, userId }) => {
                                 <div style={{ flex: 1, minWidth: 0 }} className="cinematic-header">
                                     <ChannelHeader />
                                 </div>
-                                {activeProject && (
+                                {activeProject && !isMobile && (
                                     <motion.button
                                         whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                                         onClick={() => setShowDetails(!showDetails)}
@@ -273,12 +273,16 @@ const ChatLayout = ({ projects, userId }) => {
                                             fontWeight: 700, fontSize: '0.8rem', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
                                         }}
                                     >
-                                        <Info size={16} /> {!isMobile && 'Intelligence'}
+                                        <Info size={16} /> Intelligence
                                     </motion.button>
                                 )}
                             </div>
-                            <MessageList />
-                            <MessageInput />
+                            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                                <MessageList />
+                            </div>
+                            <div style={{ flexShrink: 0, borderTop: `1px solid ${theme.glassBorder}` }}>
+                                <MessageInput />
+                            </div>
                         </Window>
                         <Thread />
                     </Channel>
@@ -374,7 +378,7 @@ const StudentChat = () => {
     if (initError) return <ChatErrorBoundary><div /></ChatErrorBoundary>;
 
     return (
-        <div style={{ height: 'calc(100vh - 60px)', width: '100%', position: 'relative', background: '#f4f7fb', overflow: 'hidden' }}>
+        <div style={{ height: '100%', width: '100%', position: 'relative', background: '#f4f7fb', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             <AmbientBackground />
 
             <AnimatePresence>
@@ -385,8 +389,20 @@ const StudentChat = () => {
                 <ChatErrorBoundary>
                     {/* ANTIGRAVITY CSS INJECTION OVERRIDE ENGINE */}
                     <style>{`
+                        * {
+                            box-sizing: border-box;
+                        }
+                        
+                        body, html {
+                            height: 100%;
+                            margin: 0;
+                            padding: 0;
+                        }
+
                         /* Base Variables */
                         .str-chat {
+                            height: 100% !important;
+                            width: 100% !important;
                             --str-chat__font-family: 'Outfit', 'Inter', sans-serif !important;
                             --str-chat__primary-color: #0ea5e9 !important;
                             --str-chat__active-primary-color: #0284c7 !important;
@@ -395,6 +411,12 @@ const StudentChat = () => {
                             --str-chat__message-textarea-background-color: rgba(255,255,255,0.8) !important;
                             --str-chat__border-radius: 16px !important;
                         }
+                        
+                        .str-chat__container {
+                            height: 100% !important;
+                            display: flex;
+                            flex-direction: row;
+                        }
 
                         /* Eradicate Borders & Default Backgrounds */
                         .str-chat__channel-list, 
@@ -402,6 +424,28 @@ const StudentChat = () => {
                         .str-chat__header-li {
                             border: none !important;
                             background: transparent !important;
+                            height: 100% !important;
+                        }
+                        
+                        .str-chat__main-panel {
+                            display: flex;
+                            flex-direction: column;
+                            flex: 1;
+                            min-width: 0;
+                        }
+                        
+                        .str-chat__header {
+                            flex-shrink: 0;
+                        }
+                        
+                        .str-chat__message-list-scrollable {
+                            flex: 1;
+                            overflow-y: auto;
+                            min-height: 0;
+                        }
+                        
+                        .str-chat__input-flat-wrapper {
+                            flex-shrink: 0;
                         }
 
                         /* Channel List Styling */
