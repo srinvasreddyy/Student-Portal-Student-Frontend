@@ -353,10 +353,10 @@ const AddItemModal = ({ onClose, onAdded }) => {
 
   return createPortal(
     <motion.div initial={{ opacity: 0, backdropFilter: "blur(0px)" }} animate={{ opacity: 1, backdropFilter: "blur(12px)" }} exit={{ opacity: 0, backdropFilter: "blur(0px)" }} onClick={onClose}
-      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(15,23,42,0.4)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}
+      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(15,23,42,0.4)", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "1rem", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
     >
       <motion.div initial={{ scale: 0.9, y: 30, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.95, y: 20, opacity: 0 }} transition={physics.spring} onClick={(e) => e.stopPropagation()}
-        style={{ width: "100%", maxWidth: "540px", background: theme.glassHighlight, backdropFilter: "blur(40px)", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.6)", boxShadow: "0 40px 80px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.4) inset", padding: "clamp(1.5rem, 5vw, 2.5rem)", position: "relative" }}
+        style={{ width: "100%", maxWidth: "540px", background: theme.glassHighlight, backdropFilter: "blur(40px)", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.6)", boxShadow: "0 40px 80px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.4) inset", padding: "clamp(1.5rem, 5vw, 2.5rem)", position: "relative", margin: "auto 0", flexShrink: 0 }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
           <div>

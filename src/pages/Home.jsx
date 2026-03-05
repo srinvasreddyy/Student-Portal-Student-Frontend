@@ -394,84 +394,7 @@ const HeroSection = () => {
     );
 };
 
-const ScrollVideoSection = () => {
-    const sectionRef = useRef(null);
-    const videoRef = useRef(null);
-    const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
 
-    const videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-connections-loop-27361-large.mp4";
-
-    useEffect(() => {
-        let animationFrameId;
-        const updateVideoTime = () => {
-            if (videoRef.current && videoRef.current.duration) {
-                videoRef.current.currentTime = scrollYProgress.get() * videoRef.current.duration;
-            }
-            animationFrameId = requestAnimationFrame(updateVideoTime);
-        };
-        animationFrameId = requestAnimationFrame(updateVideoTime);
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [scrollYProgress]);
-
-    const textOpacity1 = useTransform(scrollYProgress, [0, 0.1, 0.2, 0.3], [0, 1, 1, 0]);
-    const textY1 = useTransform(scrollYProgress, [0, 0.1, 0.3], [50, 0, -50]);
-
-    const textOpacity2 = useTransform(scrollYProgress, [0.35, 0.45, 0.55, 0.65], [0, 1, 1, 0]);
-    const textY2 = useTransform(scrollYProgress, [0.35, 0.45, 0.65], [50, 0, -50]);
-
-    const textOpacity3 = useTransform(scrollYProgress, [0.7, 0.8, 0.9, 1], [0, 1, 1, 0]);
-    const textY3 = useTransform(scrollYProgress, [0.7, 0.8, 1], [50, 0, -50]);
-
-    return (
-        <div ref={sectionRef} style={{ height: '400vh', position: 'relative', background: '#020617' }}>
-            <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <video
-                    ref={videoRef} src={videoUrl} muted playsInline preload="auto"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, zIndex: 1, filter: 'hue-rotate(180deg) brightness(0.9)' }}
-                />
-
-                {/* Advanced Multi-Stop Gradient Masking */}
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, #ffffff 0%, rgba(2,6,23,0.6) 15%, rgba(2,6,23,0.6) 85%, #ffffff 100%)', zIndex: 2 }} />
-
-                <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1200px', padding: '0 5%', textAlign: 'center', color: '#ffffff' }}>
-
-                    <motion.div style={{ position: 'absolute', width: '100%', left: 0, opacity: textOpacity1, y: textY1 }}>
-                        <h2 className="outfit-font" style={{ fontSize: 'clamp(3.5rem, 6vw, 6rem)', fontWeight: 900, margin: '0 0 1rem', letterSpacing: '-0.02em', textShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-                            Visualize Your <span style={{ color: THEME.accentBlue }}>Future.</span>
-                        </h2>
-                        <p style={{ fontSize: '1.25rem', color: '#cbd5e1', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-                            Navigate through the neural pathways of opportunity. Your data and skills construct the roadmap to your career.
-                        </p>
-                    </motion.div>
-
-                    <motion.div style={{ position: 'absolute', width: '100%', left: 0, opacity: textOpacity2, y: textY2 }}>
-                        <h2 className="outfit-font" style={{ fontSize: 'clamp(3.5rem, 6vw, 6rem)', fontWeight: 900, margin: '0 0 1rem', letterSpacing: '-0.02em', textShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-                            Dynamic <span style={{ color: THEME.accentBlue }}>Connections.</span>
-                        </h2>
-                        <p style={{ fontSize: '1.25rem', color: '#cbd5e1', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-                            Every project you upload builds a node in our network. We instantly connect these nodes to recruiters searching for your exact expertise.
-                        </p>
-                    </motion.div>
-
-                    <motion.div style={{ position: 'absolute', width: '100%', left: 0, opacity: textOpacity3, y: textY3 }}>
-                        <h2 className="outfit-font" style={{ fontSize: 'clamp(3.5rem, 6vw, 6rem)', fontWeight: 900, margin: '0 0 1rem', letterSpacing: '-0.02em', textShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-                            Seamless <span style={{ color: THEME.accentBlue }}>Integration.</span>
-                        </h2>
-                        <p style={{ fontSize: '1.25rem', color: '#cbd5e1', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-                            From classroom assignment to corporate placement. Experience the frictionless transition into the professional world.
-                        </p>
-                    </motion.div>
-                </div>
-
-                <div style={{ position: 'absolute', bottom: '3rem', left: '50%', transform: 'translateX(-50%)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.8 }}>
-                    <div style={{ width: '1px', height: '60px', background: 'rgba(255,255,255,0.2)', overflow: 'hidden', borderRadius: '2px' }}>
-                        <motion.div animate={{ y: [-60, 60] }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} style={{ width: '100%', height: '50%', background: THEME.accentBlue, boxShadow: '0 0 10px #0ea5e9' }} />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 const FeaturesSection = () => {
     const [isMobile] = useState(window.innerWidth < 768);
@@ -640,7 +563,7 @@ const Footer = () => {
     return (
         <footer style={{ background: '#f8fafc', paddingTop: isMobile ? '3rem' : '6rem', borderTop: '1px solid #f1f5f9' }}>
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 5%' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${isMobile ? '140px' : '280px'}, 1fr))`, gap: isMobile ? '2rem' : '5rem', marginBottom: isMobile ? '2rem' : '5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))', gap: isMobile ? '3rem' : '5rem', marginBottom: isMobile ? '2rem' : '5rem' }}>
 
                     <CinematicScene delay={0.1}>
                         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '1.5rem' }}>
@@ -682,8 +605,8 @@ const Footer = () => {
                         <h4 className="outfit-font" style={{ color: THEME.textMain, fontWeight: 800, fontSize: '1.2rem', marginBottom: '2rem' }}>Stay Updated</h4>
                         <p style={{ color: THEME.textMuted, fontSize: '1rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>Subscribe to our newsletter for the latest platform updates and career tips.</p>
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '1rem', background: '#ffffff' }} />
-                            <motion.button whileTap={{ scale: 0.95 }} style={{ padding: '0 1.25rem', background: THEME.textMain, color: '#fff', border: 'none', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '1rem', background: '#ffffff', minWidth: 0 }} />
+                            <motion.button whileTap={{ scale: 0.95 }} style={{ padding: '0 1.25rem', background: THEME.textMain, color: '#fff', border: 'none', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <ArrowRight size={20} />
                             </motion.button>
                         </div>
@@ -716,7 +639,7 @@ const Home = () => {
             <AmbientCanvas />
             <Navbar />
             <HeroSection />
-            <ScrollVideoSection />
+
             <FeaturesSection />
             <StatsSection />
             <TimelineSection />

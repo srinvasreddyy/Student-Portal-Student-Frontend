@@ -59,11 +59,11 @@ export const studentApi = {
         api.get('/students/me/portfolio', { params: { page, limit } }),
     addPortfolioItem: (formData) =>
         api.post('/students/me/portfolio', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: { 'Content-Type': undefined },
         }),
     uploadImage: (formData) =>
         api.post('/students/me/upload-image', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: { 'Content-Type': undefined },
         }),
     addPortfolioLink: (data) => api.post('/students/me/portfolio', data),
     deletePortfolioItem: (itemId) => api.delete(`/students/me/portfolio/${itemId}`),

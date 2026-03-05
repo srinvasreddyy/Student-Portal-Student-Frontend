@@ -244,7 +244,7 @@ const DashboardLayout = () => {
                 <NotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
 
                 {/* Cinematic Route Orchestrator */}
-                <main style={{ flex: 1, overflow: isChat ? 'hidden' : 'auto', position: 'relative' }} className="antigravity-scroll">
+                <main style={{ flex: 1, overflow: isChat ? 'hidden' : 'auto', position: 'relative', height: isChat ? 'calc(100vh - 70px)' : 'auto', minHeight: 0 }} className="antigravity-scroll">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={location.pathname}

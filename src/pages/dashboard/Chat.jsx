@@ -229,7 +229,7 @@ const ChatLayout = ({ projects, userId }) => {
     if (!filters) return null;
 
     return (
-        <div style={{ display: 'flex', width: '100%', height: '100%', padding: isMobile ? '0' : '1.5rem', gap: '1.5rem', position: 'relative', zIndex: 1, minHeight: 0 }}>
+        <div style={{ display: 'flex', width: '100%', height: '100%', padding: isMobile ? '0' : '1.5rem', gap: isMobile ? '0' : '1.5rem', position: 'relative', zIndex: 1, minHeight: 0 }}>
 
             {/* Cinematic Channel List Island */}
             {showChannelList && (
@@ -248,7 +248,7 @@ const ChatLayout = ({ projects, userId }) => {
 
             {/* Chat Area Island */}
             {showChannel && (
-                <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={physics.spring} style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, position: 'relative', background: isMobile ? '#fff' : theme.glassDeep, backdropFilter: 'blur(40px)', borderRadius: isMobile ? '0' : '24px', border: isMobile ? 'none' : `1px solid ${theme.glassBorder}`, boxShadow: isMobile ? 'none' : theme.shadowElevated, overflow: 'hidden', height: '100%' }}>
+                <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={physics.spring} style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: 0, position: 'relative', background: isMobile ? '#fff' : theme.glassDeep, backdropFilter: 'blur(40px)', borderRadius: isMobile ? '0' : '24px', border: isMobile ? 'none' : `1px solid ${theme.glassBorder}`, boxShadow: isMobile ? 'none' : theme.shadowElevated, overflow: 'hidden', height: '100%' }}>
                     <Channel>
                         <Window style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', alignItems: 'center', borderBottom: `1px solid ${theme.glassBorder}`, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(20px)', padding: isMobile ? '0.5rem' : '0', flexShrink: 0 }}>
@@ -378,7 +378,7 @@ const StudentChat = () => {
     if (initError) return <ChatErrorBoundary><div /></ChatErrorBoundary>;
 
     return (
-        <div style={{ height: '100%', width: '100%', position: 'relative', background: '#f4f7fb', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+        <div style={{ height: '100%', width: '100%', position: 'relative', background: '#f4f7fb', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0, maxHeight: '100%' }}>
             <AmbientBackground />
 
             <AnimatePresence>
@@ -418,6 +418,14 @@ const StudentChat = () => {
                             flex-direction: row;
                         }
 
+                        /* Ensure channel fills height */
+                        .str-chat__channel {
+                            height: 100% !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            min-height: 0 !important;
+                        }
+
                         /* Eradicate Borders & Default Backgrounds */
                         .str-chat__channel-list, 
                         .str-chat__main-panel,
@@ -432,6 +440,8 @@ const StudentChat = () => {
                             flex-direction: column;
                             flex: 1;
                             min-width: 0;
+                            min-height: 0;
+                            height: 100% !important;
                         }
                         
                         .str-chat__header {
@@ -446,6 +456,16 @@ const StudentChat = () => {
                         
                         .str-chat__input-flat-wrapper {
                             flex-shrink: 0;
+                        }
+
+                        /* Mobile-specific height fix */
+                        @media (max-width: 768px) {
+                            .str-chat__main-panel {
+                                max-height: 100% !important;
+                            }
+                            .str-chat__message-list-scroll {
+                                max-height: none !important;
+                            }
                         }
 
                         /* Channel List Styling */
@@ -500,7 +520,9 @@ const StudentChat = () => {
 
                         /* Message Bubbles Architecture */
                         .str-chat__li { margin-bottom: 1rem !important; }
-                        .str-chat__message-simple-text-inner {
+                        
+                        .str-chat__message-simple-text-inner,
+                        .str-chat__message-text-inner {
                             border-radius: 20px !important;
                             padding: 0.8rem 1.2rem !important;
                             font-size: 0.95rem !important;
@@ -510,20 +532,45 @@ const StudentChat = () => {
                         }
                         
                         /* User's Own Messages */
-                        .str-chat__message-simple--me .str-chat__message-simple-text-inner {
+                        .str-chat__message-simple--me .str-chat__message-simple-text-inner,
+                        .str-chat__message-simple--me .str-chat__message-text-inner,
+                        .str-chat__message--me .str-chat__message-simple-text-inner,
+                        .str-chat__message--me .str-chat__message-text-inner,
+                        .str-chat__message-bubble--me {
                             background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
-                            color: #fff !important;
+                            color: #ffffff !important;
                             border-bottom-right-radius: 4px !important;
                             box-shadow: 0 10px 25px rgba(14,165,233,0.2) !important;
                             border: none !important;
                         }
 
+                        /* Target all child elements inside "me" messages to ensure text is white */
+                        .str-chat__message-simple--me .str-chat__message-simple-text-inner *,
+                        .str-chat__message-simple--me .str-chat__message-text-inner *,
+                        .str-chat__message--me .str-chat__message-simple-text-inner *,
+                        .str-chat__message--me .str-chat__message-text-inner *,
+                        .str-chat__message-bubble--me * {
+                            color: #ffffff !important;
+                        }
+
                         /* Others Messages */
-                        .str-chat__message-simple--other .str-chat__message-simple-text-inner {
-                            background: #fff !important;
+                        .str-chat__message-simple--other .str-chat__message-simple-text-inner,
+                        .str-chat__message-simple--other .str-chat__message-text-inner,
+                        .str-chat__message--other .str-chat__message-simple-text-inner,
+                        .str-chat__message--other .str-chat__message-text-inner,
+                        .str-chat__message-bubble--other {
+                            background: #ffffff !important;
                             color: #0f172a !important;
                             border-bottom-left-radius: 4px !important;
                             border: 1px solid #e2e8f0 !important;
+                        }
+
+                        .str-chat__message-simple--other .str-chat__message-simple-text-inner *,
+                        .str-chat__message-simple--other .str-chat__message-text-inner *,
+                        .str-chat__message--other .str-chat__message-simple-text-inner *,
+                        .str-chat__message--other .str-chat__message-text-inner *,
+                        .str-chat__message-bubble--other * {
+                            color: #0f172a !important;
                         }
 
                         /* Avatar & Meta */
