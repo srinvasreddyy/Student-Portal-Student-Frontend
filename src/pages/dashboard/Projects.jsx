@@ -87,7 +87,7 @@ const ProjectDetail = ({ project, onClose, onApply, applying }) => {
                 onClick={e => e.stopPropagation()}
                 style={{ width: '100%', maxWidth: '720px', maxHeight: '90vh', overflowY: 'auto', background: theme.glassDeep, backdropFilter: 'blur(40px)', borderRadius: 'clamp(20px, 4vw, 32px)', border: `1px solid ${theme.glassBorder}`, boxShadow: '0 60px 120px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.5) inset', padding: 'clamp(1.5rem, 5vw, 3rem)', position: 'relative' }}
             >
-                <motion.button whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.05)" }} whileTap={{ scale: 0.9 }} onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '50%', display: 'flex', color: theme.textSecondary, transition: 'background 0.2s' }}>
+                <motion.button type="button" whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.05)" }} whileTap={{ scale: 0.9 }} onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.textSecondary, transition: 'background 0.2s', zIndex: 50, pointerEvents: 'auto' }}>
                     <X size={20} />
                 </motion.button>
 
