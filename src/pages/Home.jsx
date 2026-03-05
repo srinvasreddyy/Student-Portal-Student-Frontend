@@ -222,7 +222,7 @@ const Navbar = () => {
                 transition={PHYSICS.spring}
                 style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    width: '100%', maxWidth: scrolled ? '1000px' : '1400px',
+                    width: '100%', maxWidth: '1400px',
                     padding: scrolled ? '0.75rem 1.5rem' : '0 0',
                     background: scrolled ? THEME.glassDeep : 'transparent',
                     backdropFilter: scrolled ? 'blur(24px)' : 'none',
